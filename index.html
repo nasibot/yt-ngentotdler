@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family:sans-serif; max-width:600px; margin:auto; padding:40px">
+
+<h2>YouTube Downloader</h2>
+
+<input id="url" placeholder="Masukkan URL YouTube" style="width:100%; padding:10px;">
+
+<br><br>
+
+<button onclick="downloadVideo()">Download Video</button>
+<button onclick="downloadAudio()">Download MP3</button>
+
+<p id="status"></p>
+
+<script>
+const BACKEND = "https://47721384-019a-44e8-9a71-b4157c22c2c5-00-3roodn68l1qws.sisko.replit.dev/"; // GANTI DENGAN URL REPLIT LU
+
+async function downloadVideo(){
+    download(BACKEND + "/video");
+}
+
+async function downloadAudio(){
+    download(BACKEND + "/audio");
+}
+
+async function download(endpoint){
+    const link = document.getElementById("url").value.trim();
+    if(!link){ alert("Masukkan URL!"); return; }
+
+    document.getElementById("status").innerText = "Processing...";
+
+    const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: link})
+    });
+
+    if(!res.ok){
+        document.getElementById("status").innerText = "Error cuy";
+        return;
+    }
+
+    const blob = await res.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "download";
+    a.click();
+    document.getElementById("status").innerText = "Done!";
+}
+</script>
+
+</body>
+</html>
