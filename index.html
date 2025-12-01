@@ -1,52 +1,75 @@
 <!DOCTYPE html>
-<html>
-<body style="font-family:sans-serif; max-width:600px; margin:auto; padding:40px">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        input {
+            width: 300px;
+            padding: 10px;
+            border: none;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: #ff4444;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff2222;
+        }
+        .wrap {
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
 
-<h2>YouTube Downloader</h2>
+<div class="wrap">
+    <h1>YouTube Downloader</h1>
+    <p>Masukkan link YouTube di bawah</p>
 
-<input id="url" placeholder="Masukkan URL YouTube" style="width:100%; padding:10px;">
+    <input type="text" id="ytlink" placeholder="https://youtube.com/..." />
 
-<br><br>
-
-<button onclick="downloadVideo()">Download Video</button>
-<button onclick="downloadAudio()">Download MP3</button>
-
-<p id="status"></p>
+    <button onclick="downloadMP4()">Download MP4</button>
+    <br><br>
+    <button onclick="downloadMP3()">Download MP3</button>
+</div>
 
 <script>
-const BACKEND = "https://47721384-019a-44e8-9a71-b4157c22c2c5-00-3roodn68l1qws.sisko.replit.dev/"; // GANTI DENGAN URL REPLIT LU
-
-async function downloadVideo(){
-    download(BACKEND + "/video");
-}
-
-async function downloadAudio(){
-    download(BACKEND + "/audio");
-}
-
-async function download(endpoint){
-    const link = document.getElementById("url").value.trim();
-    if(!link){ alert("Masukkan URL!"); return; }
-
-    document.getElementById("status").innerText = "Processing...";
-
-    const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url: link})
-    });
-
-    if(!res.ok){
-        document.getElementById("status").innerText = "Error cuy";
+function downloadMP4() {
+    let link = document.getElementById("ytlink").value;
+    if (!link) {
+        alert("Masukkan link dulu atuh.");
         return;
     }
+    window.location.href = "https://api.vevioz.com/?url=" + encodeURIComponent(link);
+}
 
-    const blob = await res.blob();
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "download";
-    a.click();
-    document.getElementById("status").innerText = "Done!";
+function downloadMP3() {
+    let link = document.getElementById("ytlink").value;
+    if (!link) {
+        alert("Masukkan link dulu dodol.");
+        return;
+    }
+    window.location.href = "https://api.vevioz.com/mp3?url=" + encodeURIComponent(link);
 }
 </script>
 
